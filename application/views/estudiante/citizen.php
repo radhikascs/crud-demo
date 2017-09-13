@@ -53,8 +53,8 @@
                     <th><input type="checkbox" id="check-all"></th>
                     <th>Name</th>
                     <th>Lastname</th>
-                    <th>DNI</th>
-                    <th>course</th>
+                    <th>Pin Code</th>
+                    <th>Identification Type</th>
                     <th style="width:150px;">Action</th>
                 </tr>
             </thead>
@@ -65,8 +65,8 @@
                     <th></th>
                     <th>Name</th>
                     <th>Lastname</th>
-                    <th>DNI</th>
-                    <th>course</th>
+                    <th>Pin Code</th>
+                    <th>Identification Type</th>
                     <th>Action</th>
                 </tr>
             </tfoot>

@@ -14,6 +14,7 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+ 
     </head>
 <body>
 
@@ -44,6 +45,7 @@
         <h3 style="text-decoration:underline">List of Citizens</h3>
         <button class="btn btn-success" onclick="addEstudiante()"><i class="glyphicon glyphicon-plus"></i>Add Citizen</button>
         <button class="btn btn-default" onclick="reloadTable()"><i class="glyphicon glyphicon-refresh"></i>Reload</button>
+        <button class="btn btn-success exportXlsBtn" ><i class="glyphicon glyphicon-export"></i>Export To Excel</button>
         <button id="deleteList" class="btn btn-danger" style="display: none;" onclick="deleteList()"><i class="glyphicon glyphicon-trash"></i>Delete list</button>
         <br />
         <br />
@@ -52,10 +54,10 @@
                 <tr>
                     <th><input type="checkbox" id="check-all"></th>
                     <th>Name</th>
-                    <th>Lastname</th>
-                    <th>DNI</th>
-                    <th>course</th>
-                    <th style="width:150px;">Action</th>
+                    <th>Address</th>
+                    <th>Pin Code</th>
+                    <th>ID Type</th>
+                    <th style="width:150px;" id="hidden">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -64,22 +66,34 @@
                 <tr>
                     <th></th>
                     <th>Name</th>
-                    <th>Lastname</th>
-                    <th>DNI</th>
-                    <th>course</th>
-                    <th>Action</th>
+                    <th>Address</th>
+                    <th>Pin Code</th>
+                    <th>ID Type </th>
+                    <th id="hidden">Action</th>
                 </tr>
             </tfoot>
         </table>
     </div>
 <script src="http://localhost/crud-demo/assets/jquery/jquery.js"></script>
+<script src="http://localhost/crud-demo/assets/jquery/jquery.min.js"></script>
+<script src="http://localhost/crud-demo/assets/jquery/jquery-1.10.2.js"></script>
+<script src="http://localhost/crud-demo/assets/jquery/jquery-ui.js"></script>
 <script src="http://localhost/crud-demo/assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="http://localhost/crud-demo/assets/datatables/js/jquery.dataTables.min.js"></script>
 <script src="http://localhost/crud-demo/assets/datatables/js/dataTables.bootstrap.js"></script>
+
 <script type="text/javascript">
 
 var save_method; //for save method string
 var table;
+
+// Initialise a datepicker
+
+   $(function() {
+     $("#datepicker").datepicker();
+   });
+
+
 
 $(document).ready(function() {
 
@@ -196,6 +210,23 @@ function reloadTable()
     table.ajax.reload(null,false); //reload datatable ajax
     $('#deleteList').hide();
 }
+
+$('.exportXlsBtn').on('click', function(e) {
+  console.log("Export Content");
+      var a = document.createElement('a');
+            //getting data from our div that contains the HTML table
+            var data_type = 'data:application/vnd.ms-excel';
+            var table_div = document.getElementById('table');         
+            var table_html = table_div.outerHTML.replace(/ /g, '%20');
+            a.href = data_type + ', ' + table_html;
+            //setting the file name
+            a.download = 'Citizen List' + '.xls';
+            //triggering the function
+            a.click();
+            //just in case, prevent default behaviour
+            e.preventDefault();
+
+  });
 
 function save()
 {
@@ -318,7 +349,7 @@ function deleteList()
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-               <!-- <h3 class="modal-title">Form student</h3>-->
+              <h3 class="modal-title"></h3>
             </div>
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">
@@ -333,29 +364,56 @@ function deleteList()
                         <div class="form-group">
                             <label class="control-label col-md-3">Name</label>
                             <div class="col-md-9">
-                                <input name="estu_nombre" placeholder="Student name" class="form-control" type="text">
+                                <input name="estu_nombre" placeholder="Citizen name" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Lastname</label>
+                            <label class="control-label col-md-3">Address</label>
                             <div class="col-md-9">
-                                <input name="estu_apellido" placeholder="Student lastname" class="form-control" type="text">
+                                <input name="estu_apellido" placeholder="Address" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">DNI</label>
+                            <label class="control-label col-md-3">Pin Code</label>
                             <div class="col-md-9">
-                                <input name="estu_cedula" placeholder="DNI" class="form-control" type="text">
+                                <input name="estu_cedula" placeholder="Pin Code" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Course</label>
+                        <label class="control-label col-md-3">Mobile</label>
+                        <div class="col-md-9">
+                                <input name="mobile" placeholder="Mobile" class="form-control" type="text">
+                                <span class="help-block"></span>
+                        </div>
+                        </div>
+                        <div class="form-group">
+                        <label class="control-label col-md-3">Qualification</label>
+                        <div class="col-md-9">
+                        <input name="qualification" placeholder="Qualification" class="form-control" type="text">
+                                <span class="help-block"></span>
+                        </div>
+                        </div>
+                        <div class="form-group">
+                        <label class="control-label col-md-3">City</label>
+                        <div class="col-md-9">
+                        <input name="city" placeholder="city" class="form-control" type="text">
+                                <span class="help-block"></span>
+                        </div>
+                        </div>
+                        <div class="form-group">
+                        <label class="control-label col-md-3">Date of Birth</label>
+                        <div class="col-md-9">
+                        <input name="dob" class="form-control" type="text" id="datepicker" />
+                        <span class="help-block"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">ID Type</label>
                             <div class="col-md-9">
                                 <select name="carr_nombre" class="form-control">
-                                    <option value="">--Select course--</option>
+                                    <option value="">--Select Type--</option>
                                     <?php
                                     foreach($list as $value){
                                       echo '<option value="'.$value->carr_id.'">'.$value->carr_nombre.'</option>';
@@ -365,7 +423,15 @@ function deleteList()
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                    </div>
+                        <div class="form-group">
+                        <label class="control-label col-md-3"> ID Proof: </label>
+                        <div class="col-md-9">
+                        <input name="picture" class="form-control" type="file"  />
+                        <span class="help-block"></span>
+                        </div> 
+                        </div>
+
+    
                 </form>
             </div>
             <div class="modal-footer">

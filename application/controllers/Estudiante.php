@@ -28,6 +28,7 @@ class Estudiante extends CI_Controller{
           $row[] = $estudiante->estu_apellido;
           $row[] = $estudiante->estu_cedula;
           $row[] = $estudiante->carr_nombre;
+          
           //add html for action
           $row[] = '<a class="btn btn-sm btn-primary" href="javascript:void()" title="Edit" onclick="editEstudiante('."'".$estudiante->estu_id."'".')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
                 <a class="btn btn-sm btn-danger" href="javascript:void()" title="Hapus" onclick="deleteEstudiante('."'".$estudiante->estu_id."'".')"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
@@ -52,11 +53,35 @@ class Estudiante extends CI_Controller{
   public function ajax_add()
   {
       $this->_validate();
+      //Check whether user upload picture
+      if(!empty($_FILES['picture']['name'])){
+        $config['upload_path'] = 'uploads/images/';
+        $config['allowed_types'] = 'jpg|jpeg|png|gif';
+        $config['file_name'] = $_FILES['picture']['name'];
+        
+        //Load upload library and initialize configuration
+        $this->load->library('upload',$config);
+        $this->upload->initialize($config);
+        
+        if($this->upload->do_upload('picture')){
+            $uploadData = $this->upload->data();
+            $picture = $uploadData['file_name'];
+        }else{
+            $picture = '';
+        }
+        }else{
+        $picture = '';
+        }
       $data = array(
               'estu_nombre' => $this->input->post('estu_nombre'),
               'estu_apellido' => $this->input->post('estu_apellido'),
               'estu_cedula' => $this->input->post('estu_cedula'),
-              'carr_id' => $this->input->post('carr_nombre')
+              'carr_id' => $this->input->post('carr_nombre'),
+              'mobile' => $this->input->post('mobile'),
+              'qualification' => $this->input->post('qualification'),
+              'city' => $this->input->post('city'),
+              'dob' => $this->input->post('dob'),
+              'photo' => $picture,
           );
       $insert = $this->Estudiante_model->save($data);
       echo json_encode(array("status" => TRUE));
@@ -69,7 +94,11 @@ class Estudiante extends CI_Controller{
               'estu_nombre' => $this->input->post('estu_nombre'),
               'estu_apellido' => $this->input->post('estu_apellido'),
               'estu_cedula' => $this->input->post('estu_cedula'),
-              'carr_id' => $this->input->post('carr_nombre')
+              'carr_id' => $this->input->post('carr_nombre'),
+              'mobile' => $this->input->post('mobile'),
+              'qualification' => $this->input->post('qualification'),
+              'city' => $this->input->post('city'),
+              'dob' => $this->input->post('dob')
           );
       $this->Estudiante_model->update(array('estu_id' => $this->input->post('estu_id')), $data);
       echo json_encode(array("status" => TRUE));
